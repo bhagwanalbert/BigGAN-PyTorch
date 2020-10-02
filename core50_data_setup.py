@@ -8,6 +8,7 @@ dataset = CORE50(root='/home/abhagwan/datasets/core50', scenario="nicv2_391")
 new_root = "/home/abhagwan/BigGAN-PyTorch/data/core50"
 
 train_x, train_y = next(iter(dataset))
+train_x = train_x.astype(np.uint8)
 train_y = train_y // 5
 
 for f in range(int(np.max(train_y))):
