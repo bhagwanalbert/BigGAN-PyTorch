@@ -10,7 +10,7 @@ new_root = "/home/abhagwan/BigGAN-PyTorch/data/core50"
 train_x, train_y = next(iter(dataset))
 train_y = train_y // 5
 
-for f in range(int(np.max(train_y)):
+for f in range(int(np.max(train_y))):
     os.mkdir(new_root + "/c" + format(f,"02d"))
 
 for i in range(train_y.size(0)):
