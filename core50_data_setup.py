@@ -21,7 +21,7 @@ print(train_y)
 
 for i in range(train_y.shape[0]):
     print(train_x.shape)
-    print(train_x[i])
+    print(train_x[i].shape)
 
     im = Image.fromarray(train_x[i])
     im.save(new_root + "/c" + format(train_y[i],"02d") + "/C_" + format(i,"04d") + ".png")
