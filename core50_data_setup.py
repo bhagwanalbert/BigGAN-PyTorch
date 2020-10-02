@@ -18,11 +18,8 @@ for f in range(int(np.max(train_y))):
         pass
     else:
         print("Some error occured while creating folders")
-print(train_y)
 
 for i in range(train_y.shape[0]):
-    print(train_x.shape)
-    print(train_x[i].shape)
 
     im = Image.fromarray(train_x[i])
-    im.save(new_root + "/c" + format(train_y[i],"02d") + "/C_" + format(i,"04d") + ".png")
+    im.save(new_root + "/c" + format(int(train_y[i]),"02d") + "/C_" + format(i,"04d") + ".png")
