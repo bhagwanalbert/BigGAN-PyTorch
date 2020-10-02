@@ -11,8 +11,12 @@ train_x, train_y = next(iter(dataset))
 train_y = train_y // 5
 
 for f in range(int(np.max(train_y))):
-    os.mkdir(new_root + "/c" + format(f,"02d"))
-
+    try:
+        os.mkdir(new_root + "/c" + format(f,"02d"))
+    except FileExistsError:
+        pass
+    else:
+        print("Some error occured while creating folders")
 print(train_y)
 
 for i in range(train_y.size(0)):
