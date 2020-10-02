@@ -20,5 +20,8 @@ for f in range(int(np.max(train_y))):
 print(train_y)
 
 for i in range(train_y.shape[0]):
+    print(train_x.shape)
+    print(train_x[i])
+
     im = Image.fromarray(train_x[i])
     im.save(new_root + "/c" + format(train_y[i],"02d") + "/C_" + format(i,"04d") + ".png")
