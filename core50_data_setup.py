@@ -11,7 +11,7 @@ train_x, train_y = next(iter(dataset))
 train_x = train_x.astype(np.uint8)
 train_y = train_y // 5
 
-for f in range(int(np.max(train_y))):
+for f in range(int(np.max(train_y))+1):
     try:
         os.mkdir(new_root + "/c" + format(f,"02d"))
     except FileExistsError:
