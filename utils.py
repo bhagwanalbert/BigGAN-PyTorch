@@ -424,7 +424,7 @@ nclass_dict = {'I32': 1000, 'I32_hdf5': 1000,
                'I128': 1000, 'I128_hdf5': 1000,
                'I256': 1000, 'I256_hdf5': 1000,
                'C10': 10, 'C100': 100,
-               'CORE50': 10}
+               'CORE50': 1000}
 # Number of classes to put per sample sheet
 classes_per_sheet_dict = {'I32': 50, 'I32_hdf5': 50,
                           'I64': 50, 'I64_hdf5': 50,
@@ -570,7 +570,7 @@ def get_data_loaders(dataset, data_root=None, augment=False, batch_size=64,
 
   if dataset == 'CORE50':
     train_transform = None
-    
+
   train_set = which_dataset(root=data_root, transform=train_transform,
                             load_in_mem=load_in_mem, **dataset_kwargs)
 
@@ -729,6 +729,8 @@ def load_weights(G, D, state_dict, weights_root, experiment_name,
     G.load_state_dict(
       torch.load('%s/%s.pth' % (root, join_strings('_', ['G', name_suffix]))),
       strict=strict)
+    for param_tensor in G.state_dict():
+        print(param_tensor, "\t", G.state_dict()[param_tensor].size())
     if load_optim:
       G.optim.load_state_dict(
         torch.load('%s/%s.pth' % (root, join_strings('_', ['G_optim', name_suffix]))))
@@ -736,6 +738,8 @@ def load_weights(G, D, state_dict, weights_root, experiment_name,
     D.load_state_dict(
       torch.load('%s/%s.pth' % (root, join_strings('_', ['D', name_suffix]))),
       strict=strict)
+    for param_tensor in D.state_dict():
+        print(param_tensor, "\t", D.state_dict()[param_tensor].size())
     if load_optim:
       D.optim.load_state_dict(
         torch.load('%s/%s.pth' % (root, join_strings('_', ['D_optim', name_suffix]))))
