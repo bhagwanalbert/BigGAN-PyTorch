@@ -424,14 +424,14 @@ nclass_dict = {'I32': 1000, 'I32_hdf5': 1000,
                'I128': 1000, 'I128_hdf5': 1000,
                'I256': 1000, 'I256_hdf5': 1000,
                'C10': 10, 'C100': 100,
-               'CORE50': 1000}
+               'CORE50': 50}
 # Number of classes to put per sample sheet
 classes_per_sheet_dict = {'I32': 50, 'I32_hdf5': 50,
                           'I64': 50, 'I64_hdf5': 50,
                           'I128': 20, 'I128_hdf5': 20,
                           'I256': 20, 'I256_hdf5': 20,
                           'C10': 10, 'C100': 100,
-                          'CORE50': 10}
+                          'CORE50': 50}
 activation_dict = {'inplace_relu': nn.ReLU(inplace=True),
                    'relu': nn.ReLU(inplace=False),
                    'ir': nn.ReLU(inplace=True),}
@@ -719,37 +719,33 @@ def save_weights(G, D, state_dict, weights_root, experiment_name,
 
 # Load a model's weights, optimizer, and the state_dict
 def load_weights(G, D, state_dict, weights_root, experiment_name,
-                 name_suffix=None, G_ema=None, strict=True, load_optim=True):
+                 name_suffix=None, G_ema=None, strict=True, skip_load_optim=False):
   root = '/'.join([weights_root, experiment_name])
   if name_suffix:
     print('Loading %s weights from %s...' % (name_suffix, root))
   else:
     print('Loading weights from %s...' % root)
   if G is not None:
-    G.load_state_dict(
-      torch.load('%s/%s.pth' % (root, join_strings('_', ['G', name_suffix]))),
-      strict=strict)
-    for param_tensor in G.state_dict():
-        print(param_tensor, "\t", G.state_dict()[param_tensor].size())
-    if load_optim:
+    pretrained_model = torch.load('%s/%s.pth' % (root, join_strings('_', ['G', name_suffix])))
+    pretrained_model = {k: v for k, v in pretrained_model.items() if (k in G.state_dict()) and (G.state_dict()[k].shape == pretrained_model[k].shape)}
+    G.load_state_dict(pretrained_model, strict=strict)
+    if not skip_load_optim:
       G.optim.load_state_dict(
         torch.load('%s/%s.pth' % (root, join_strings('_', ['G_optim', name_suffix]))))
   if D is not None:
-    D.load_state_dict(
-      torch.load('%s/%s.pth' % (root, join_strings('_', ['D', name_suffix]))),
-      strict=strict)
-    for param_tensor in D.state_dict():
-        print(param_tensor, "\t", D.state_dict()[param_tensor].size())
-    if load_optim:
+    pretrained_model = torch.load('%s/%s.pth' % (root, join_strings('_', ['D', name_suffix])))
+    pretrained_model = {k: v for k, v in pretrained_model.items() if (k in D.state_dict()) and (D.state_dict()[k].shape == pretrained_model[k].shape)}
+    D.load_state_dict(pretrained_model, strict=strict)
+    if not skip_load_optim:
       D.optim.load_state_dict(
         torch.load('%s/%s.pth' % (root, join_strings('_', ['D_optim', name_suffix]))))
   # Load state dict
   for item in state_dict:
     state_dict[item] = torch.load('%s/%s.pth' % (root, join_strings('_', ['state_dict', name_suffix])))[item]
   if G_ema is not None:
-    G_ema.load_state_dict(
-      torch.load('%s/%s.pth' % (root, join_strings('_', ['G_ema', name_suffix]))),
-      strict=strict)
+    pretrained_model = torch.load('%s/%s.pth' % (root, join_strings('_', ['G_ema', name_suffix])))
+    pretrained_model = {k: v for k, v in pretrained_model.items() if (k in G_ema.state_dict()) and (G_ema.state_dict()[k].shape == pretrained_model[k].shape)}
+    G_ema.load_state_dict(pretrained_model, strict=strict)
 
 
 ''' MetricsLogger originally stolen from VoxNet source code.
