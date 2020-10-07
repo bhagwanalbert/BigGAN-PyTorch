@@ -107,9 +107,9 @@ def run(config):
     print('Loading weights...')
     utils.load_weights(G, D, state_dict,
                        config['weights_root'], experiment_name,
-                       skip_load_optim = config['skip_load_optim'],
                        config['load_weights'] if config['load_weights'] else None,
-                       G_ema if config['ema'] else None)
+                       G_ema if config['ema'] else None,
+                       skip_load_optim = config['skip_load_optim'],)
 
   # If parallel, parallelize the GD module
   if config['parallel']:
