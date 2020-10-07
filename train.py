@@ -44,6 +44,7 @@ def run(config):
   config['D_activation'] = utils.activation_dict[config['D_nl']]
   # By default, skip init if resuming training.
   config['skip_load_optim'] = False
+  config['strict'] = True
   if config['resume']:
     print('Skipping initialization for training resumption...')
     config['skip_init'] = True
@@ -51,6 +52,7 @@ def run(config):
     print('Finetunning with a different dataset')
     config['skip_init'] = False
     config['skip_load_optim'] = True
+    config['strict'] = False
 
   config = utils.update_config_roots(config)
   device = 'cuda'
@@ -109,7 +111,8 @@ def run(config):
                        config['weights_root'], experiment_name,
                        config['load_weights'] if config['load_weights'] else None,
                        G_ema if config['ema'] else None,
-                       skip_load_optim = config['skip_load_optim'],)
+                       skip_load_optim = config['skip_load_optim'],
+                       strict = config['strict'])
 
   # If parallel, parallelize the GD module
   if config['parallel']:
