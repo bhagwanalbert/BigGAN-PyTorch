@@ -378,7 +378,7 @@ class CORE50(object):
     }
 
     def __init__(self, root='', preload=False, scenario='nicv2_391', cumul=False,
-                 run=0, start_batch=0, transform=None, load_in_mem=False):
+                 run=0, start_batch=0, transform=None, load_in_mem=False, **kwargs):
         """" Initialize Object """
 
         self.root = os.path.expanduser(root)
