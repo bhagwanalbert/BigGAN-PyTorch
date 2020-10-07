@@ -423,8 +423,8 @@ class CORE50(object):
     def __iter__(self):
         return self
 
-    def __iter__(self):
-        return self
+    def __len__(self):
+        return 1
 
     def __next__(self):
         """ Next batch based on the object parameter which can be also changed
