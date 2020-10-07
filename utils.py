@@ -338,6 +338,9 @@ def prepare_parser():
   parser.add_argument(
     '--resume', action='store_true', default=False,
     help='Resume training? (default: %(default)s)')
+  parser.add_argument(
+    '--finetune', action='store_true', default=False,
+    help='Finetune training? (default: %(default)s)')
 
   ### Log stuff ###
   parser.add_argument(
